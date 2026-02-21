@@ -1,0 +1,47 @@
+/* Recording indicator circle */
+.recording-indicator {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recording-indicator--active {
+    background-color: #fde8e8;
+    box-shadow: 0 0 0 6px rgba(194, 57, 52, 0.2);
+    animation: pulse-ring 1.5s ease-in-out infinite;
+}
+
+/* Pulsing icon colour when recording */
+.recording-icon--pulsing {
+    color: #c23934;
+    animation: pulse-icon 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 0   rgba(194, 57, 52, 0.4); }
+    70%  { box-shadow: 0 0 0 14px rgba(194, 57, 52, 0);   }
+    100% { box-shadow: 0 0 0 0   rgba(194, 57, 52, 0);   }
+}
+
+@keyframes pulse-icon {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.4; }
+}
+
+/* Button row */
+.button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* Success icon colour override */
+lightning-icon[style*="color: #4bca81"] {
+    --lwc-colorTextSuccess: #4bca81;
+}

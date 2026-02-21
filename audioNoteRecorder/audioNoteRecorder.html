@@ -1,0 +1,147 @@
+<template>
+    <lightning-card title="Audio Note Recorder" icon-name="utility:record">
+        <div class="slds-p-around_medium">
+
+            <!-- STEP 1: RECORD -->
+            <template lwc:if={isStepRecord}>
+                <div class="slds-align_absolute-center slds-m-bottom_medium">
+                    <div class={recordingIndicatorClass}>
+                        <lightning-icon icon-name="utility:record" size="large" class={recordingIconClass}></lightning-icon>
+                    </div>
+                </div>
+
+                <p class="slds-text-align_center slds-text-body_regular slds-m-bottom_small">
+                    {recordingStatusLabel}
+                </p>
+
+                <template lwc:if={isRecording}>
+                    <p class="slds-text-align_center slds-text-color_error slds-m-bottom_medium">
+                        <lightning-icon icon-name="utility:clock" size="x-small" class="slds-m-right_xx-small"></lightning-icon>
+                        {recordingDuration}
+                    </p>
+                </template>
+
+                <div class="slds-align_absolute-center slds-m-top_medium button-row">
+                    <template lwc:if={isRecording}>
+                        <lightning-button
+                            variant="destructive"
+                            label="Stop Recording"
+                            icon-name="utility:stop"
+                            onclick={stopRecording}>
+                        </lightning-button>
+                    </template>
+                    <template lwc:else>
+                        <lightning-button
+                            variant="brand"
+                            label="Start Recording"
+                            icon-name="utility:record"
+                            onclick={startRecording}
+                            disabled={isTranscribing}>
+                        </lightning-button>
+                    </template>
+                </div>
+
+                <template lwc:if={isTranscribing}>
+                    <div class="slds-align_absolute-center slds-m-top_medium" style="flex-direction: column;">
+                        <lightning-spinner alternative-text="Transcribing..." size="medium"></lightning-spinner>
+                        <p class="slds-m-top_small slds-text-color_weak">Transcribing your recording&#8230;</p>
+                    </div>
+                </template>
+
+                <template lwc:if={transcriptionError}>
+                    <div class="slds-m-top_medium">
+                        <div class="slds-notify slds-notify_alert slds-alert_error" role="alert">
+                            <lightning-icon icon-name="utility:error" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                            <h2>{transcriptionError}</h2>
+                        </div>
+                        <div class="slds-align_absolute-center slds-m-top_small button-row">
+                            <lightning-button
+                                variant="neutral"
+                                label="Save Audio Only"
+                                onclick={saveAudioOnly}>
+                            </lightning-button>
+                            <lightning-button
+                                variant="neutral"
+                                label="Try Again"
+                                onclick={resetRecorder}>
+                            </lightning-button>
+                        </div>
+                    </div>
+                </template>
+            </template>
+
+            <!-- STEP 2: PREVIEW & EDIT -->
+            <template lwc:elseif={isStepPreview}>
+                <div class="slds-m-bottom_medium">
+                    <div class="slds-notify slds-notify_alert" role="alert" style="background-color: #e9f5fe; border-color: #0070d2;">
+                        <lightning-icon icon-name="utility:info" size="x-small" class="slds-m-right_x-small" style="color: #0070d2;"></lightning-icon>
+                        <h2 class="slds-text-color_default">Review your transcription below. You can edit it before saving.</h2>
+                    </div>
+                </div>
+
+                <div class="slds-form-element slds-m-bottom_medium">
+                    <label class="slds-form-element__label slds-text-title_caps">
+                        <abbr class="slds-required" title="required">*</abbr>
+                        Transcription
+                    </label>
+                    <div class="slds-form-element__control">
+                        <lightning-textarea
+                            value={transcriptionText}
+                            onchange={handleTranscriptionChange}
+                            rows="8"
+                            max-length="131072"
+                            placeholder="Transcribed text will appear here&#8230;">
+                        </lightning-textarea>
+                    </div>
+                </div>
+
+                <div class="button-row slds-m-top_medium">
+                    <lightning-button
+                        variant="neutral"
+                        label="Cancel"
+                        onclick={handleCancel}>
+                    </lightning-button>
+                    <lightning-button
+                        variant="neutral"
+                        label="Re-record"
+                        icon-name="utility:refresh"
+                        onclick={resetRecorder}>
+                    </lightning-button>
+                    <lightning-button
+                        variant="brand"
+                        label="Confirm &amp; Save"
+                        icon-name="utility:check"
+                        onclick={handleConfirmSave}
+                        disabled={isSaving}>
+                    </lightning-button>
+                </div>
+
+                <template lwc:if={isSaving}>
+                    <div class="slds-align_absolute-center slds-m-top_medium" style="flex-direction: column;">
+                        <lightning-spinner alternative-text="Saving..." size="small"></lightning-spinner>
+                        <p class="slds-m-top_small slds-text-color_weak">Saving note&#8230;</p>
+                    </div>
+                </template>
+            </template>
+
+            <!-- STEP 3: SUCCESS -->
+            <template lwc:elseif={isStepSuccess}>
+                <div class="slds-align_absolute-center slds-m-vertical_large" style="flex-direction: column;">
+                    <lightning-icon icon-name="utility:success" size="large" style="color: #4bca81;"></lightning-icon>
+                    <h2 class="slds-text-heading_medium slds-m-top_small">Note Saved Successfully!</h2>
+                    <p class="slds-text-body_regular slds-text-color_weak slds-m-top_x-small">
+                        Your transcription has been saved as a Note on this record.
+                    </p>
+                    <lightning-button
+                        variant="brand"
+                        label="Record Another"
+                        icon-name="utility:add"
+                        onclick={resetRecorder}
+                        class="slds-m-top_medium">
+                    </lightning-button>
+                </div>
+            </template>
+
+        </div>
+    </lightning-card>
+</template>
