@@ -1,12 +1,15 @@
 Admin Part
-Create A custom filed in Contact Object
+Created A custom filed in Contact Object
 Add Note or files in Related Object
-External Named Credentials
-Named Credentials
-Permission set assign to External Named Credentials
+Created External Named Credentials
+Created Named Credentials
+Created Permission set assign to External Named Credentials
 Assign Permissions to named Credentials
 
 Coding Part
 Create LWC Component
-Create Apex Controller
-Thumb rule create Test class
+  audioNoteRecord.html
+  audioNoteRecord.js
+  audioNoteRecord.css
+Created Apex Controller
+  Audio Note Controller.cls
